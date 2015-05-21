@@ -38,6 +38,7 @@ img = (opt = {}) ->
 			else
 				ps = null
 			if ps
+				ps.push file if not ps.length
 				ps.push file.path
 		next()
 	, (next) ->
@@ -46,7 +47,8 @@ img = (opt = {}) ->
 		async.eachSeries(
 			all
 			(paths, cb) =>
-				filePath = paths[0]
+				file = paths.shift()
+				filePath = file.path
 				fileName = path.basename filePath
 				dirName = path.dirname filePath
 				extName = path.extname filePath
@@ -58,8 +60,8 @@ img = (opt = {}) ->
 				spritesmith param, (err, res) =>
 					return @emit 'error', new gutil.PluginError('gulp-img-css-sprite', err) if err
 					@push new gutil.File
-						base: '/Users/gary/Projects/webyom/gulp-img-css-sprite/example/src/'
-						cwd: process.cwd()
+						base: file.base
+						cwd: file.cwd
 						path: sprite
 						contents: new Buffer res.image, 'binary'
 					for p, c of res.coordinates
