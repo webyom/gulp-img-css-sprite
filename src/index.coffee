@@ -4,6 +4,9 @@ async = require 'async'
 gutil = require 'gulp-util'
 through = require 'through2'
 spritesmith = require 'spritesmith'
+cssParser = require 'css'
+
+URL_REGEXP = /url\s*\(['"]?([^\)'"]+)['"]?\)/
 
 coordinates = {}
 
@@ -73,12 +76,67 @@ img = (opt = {}) ->
 				next()
 		)
 
+cssDeclarations = (file, declarations, complete) ->
+	dec = null
+	async.eachSeries(
+		declarations
+		(declaration, cb) =>
+			if declaration.property in ['background-image', 'background']
+				m = declaration.value.match URL_REGEXP
+				if m[1]
+					imgPath = path.resolve path.dirname(file.path), m[1]
+					coordinate = coordinates[imgPath]
+					if coordinate
+						declaration.value = declaration.value.replace URL_REGEXP, (full, url) ->
+							'url(' + path.relative(path.dirname(file.path), coordinate.sprite) + ')'
+						dec =
+							type: 'declaration'
+							property: 'background-position'
+							value: "#{coordinate.x}px #{coordinate.y}px"
+						cb()
+					else
+						cb()
+				else
+					cb()
+			else
+				cb()
+		(err) =>
+			return @emit 'error', new gutil.PluginError('gulp-img-css-sprite', err) if err
+			complete dec
+	)
+
+cssRules = (file, rules, complete) ->
+	async.eachSeries(
+		rules
+		(rule, cb) =>
+			if rule.rules
+				cssRules file, rule.rules, cb
+			if rule.declarations
+				cssDeclarations file, rule.declarations, (dec) ->
+					if dec
+						rule.declarations.push dec
+					cb()
+			else
+				cb()
+		(err) =>
+			return @emit 'error', new gutil.PluginError('gulp-img-css-sprite', err) if err
+			complete()
+	)
+
 css = (opt = {}) ->
-	console.log coordinates
 	stream = through.obj (file, enc, next) ->
 		return @emit 'error', new gutil.PluginError('gulp-img-css-sprite', 'File can\'t be null') if file.isNull()
 		return @emit 'error', new gutil.PluginError('gulp-img-css-sprite', 'Streams not supported') if file.isStream()
-		next()
+		content = file.contents.toString()
+		if URL_REGEXP.test content
+			ast = cssParser.parse content, opt
+			cssRules file, ast.stylesheet.rules || [], =>
+				file.contents = new Buffer cssParser.stringify(ast, opt)
+				@push file
+				next()
+		else
+			@push file
+			next()
 
 module.exports =
 	img: img

@@ -8,7 +8,7 @@ gulp.task 'compile', ->
 		.pipe gulp.dest('lib')
 
 gulp.task 'img', ->
-	gulp.src('example/src/**/*.+(jpg|jpeg|gif|png)')
+	gulp.src('example/src/**/*.+(jpg|png)')
 		.pipe imgCssSprite.img
 			padding: 2
 		.pipe gulp.dest('example/dest')
