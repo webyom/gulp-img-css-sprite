@@ -11,7 +11,7 @@ URL_REGEXP = /url\s*\(\s*(['"])?([^\)'"]+?)\1?\s*\)/
 ALGORITHM_REGEXP = /\b(top-down|left-right|diagonal|alt-diagonal)\b/
 X2_REGEXP = /-2x\.[^.]+$/
 
-coordinates = {}
+coordinates = global._gulpImgCssSpriteCoordinates = global._gulpImgCssSpriteCoordinates || {}
 
 inherit = (proto) ->
 	F = ->
