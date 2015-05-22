@@ -1,3 +1,4 @@
+Q = require 'q'
 fs = require 'fs'
 path = require 'path'
 async = require 'async'
@@ -7,6 +8,7 @@ spritesmith = require 'spritesmith'
 cssParser = require 'css'
 
 URL_REGEXP = /url\s*\(['"]?([^\)'"]+)['"]?\)/
+ALGORITHM_REGEXP = /\b(top-down|left-right|diagonal|alt-diagonal)\b/
 
 coordinates = {}
 
@@ -58,7 +60,7 @@ img = (opt = {}) ->
 				sprite = dirName + '/sprite' + extName
 				param = inherit opt
 				param.src = paths
-				m = fileName.match /\b(top-down|left-right|diagonal|alt-diagonal)\b/
+				m = fileName.match ALGORITHM_REGEXP
 				param.algorithm = m?[1] || param.algorithm
 				spritesmith param, (err, res) =>
 					return @emit 'error', new gutil.PluginError('gulp-img-css-sprite', err) if err
@@ -89,10 +91,12 @@ cssDeclarations = (file, declarations, complete) ->
 					if coordinate
 						declaration.value = declaration.value.replace URL_REGEXP, (full, url) ->
 							'url(' + path.relative(path.dirname(file.path), coordinate.sprite) + ')'
+						x = if coordinate.x is 0 then '0' else coordinate.x + 'px'
+						y = if coordinate.y is 0 then '0' else coordinate.y + 'px'
 						dec =
 							type: 'declaration'
 							property: 'background-position'
-							value: "#{coordinate.x}px #{coordinate.y}px"
+							value: "#{x} #{y}"
 						cb()
 					else
 						cb()
@@ -123,21 +127,30 @@ cssRules = (file, rules, complete) ->
 			complete()
 	)
 
+cssFile = (file, opt = {}) ->
+	Q.Promise (resolve, reject) ->
+		content = file.contents.toString()
+		if URL_REGEXP.test content
+			ast = cssParser.parse content, opt
+			cssRules file, ast.stylesheet.rules || [], ->
+				file.contents = new Buffer cssParser.stringify(ast, opt)
+				resolve file
+		else
+			resolve file
+
 css = (opt = {}) ->
 	stream = through.obj (file, enc, next) ->
 		return @emit 'error', new gutil.PluginError('gulp-img-css-sprite', 'File can\'t be null') if file.isNull()
 		return @emit 'error', new gutil.PluginError('gulp-img-css-sprite', 'Streams not supported') if file.isStream()
-		content = file.contents.toString()
-		if URL_REGEXP.test content
-			ast = cssParser.parse content, opt
-			cssRules file, ast.stylesheet.rules || [], =>
-				file.contents = new Buffer cssParser.stringify(ast, opt)
+		cssFile(file, opt).then(
+			(file) =>
 				@push file
 				next()
-		else
-			@push file
-			next()
+			(err) =>
+				@emit 'error', new gutil.PluginError('gulp-img-css-sprite', err) if err
+		).done()
 
 module.exports =
 	img: img
 	css: css
+	cssFile: cssFile

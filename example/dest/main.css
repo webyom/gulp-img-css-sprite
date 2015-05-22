@@ -1,0 +1,19 @@
+.a-1-jpg {
+  background: #000 url(a/sprite.jpg) left top no-repeat;
+  background-position: 0 0;
+}
+
+.a-2-jpg {
+  background-image: url(a/sprite.jpg);
+  background-position: 0 313px;
+}
+
+.a-1-png {
+  background-image: url(a/sprite.png);
+  background-position: 0 0;
+}
+
+.a-2-png {
+  background-image: url(a/sprite.png);
+  background-position: 0 482px;
+}
