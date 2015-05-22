@@ -1,11 +1,11 @@
 .a-no-sprite-jpg {
-	background: #000 url(a/no-sprite.jpg) left top no-repeat;
+	background: url(a/no-sprite.jpg) left top no-repeat;
 }
 .a-no-sprite-png {
-	background: #000 url(a/no-sprite.png) left top no-repeat;
+	background: url(a/no-sprite.png) left top no-repeat;
 }
 .a-1-jpg {
-	background: #000 url(a/sprite-top-down-1.jpg) left top no-repeat;
+	background: url(a/sprite-top-down-1.jpg) left top no-repeat;
 }
 .a-2-jpg {
 	background-image: url(a/sprite-top-down-2.jpg);
@@ -19,22 +19,22 @@
 @media (-webkit-min-device-pixel-ratio: 2), 
 (min--moz-device-pixel-ratio: 2), 
 (min-device-pixel-ratio: 2) {
-	.a-1-2x-jpg {
-		background: #000 url(a/sprite-top-down-1-2x.jpg) left top no-repeat;
+	.a-1-jpg {
+		background: url(a/sprite-top-down-1-2x.jpg) left top no-repeat;
 	}
-	.a-2-2x-jpg {
+	.a-2-jpg {
 		background-image: url(a/sprite-top-down-2-2x.jpg);
 	}
 }
 
 .b-no-sprite-jpg {
-	background: #000 url(b/no-sprite.jpg) left top no-repeat;
+	background: url(b/no-sprite.jpg) left top no-repeat;
 }
 .b-no-sprite-png {
-	background: #000 url(b/no-sprite.png) left top no-repeat;
+	background: url(b/no-sprite.png) left top no-repeat;
 }
 .b-1-jpg {
-	background: #000 url(b/sprite-diagonal-1.jpg) left top no-repeat;
+	background: url(b/sprite-diagonal-1.jpg) left top no-repeat;
 }
 .b-2-jpg {
 	background-image: url(b/sprite-diagonal-2.jpg);
@@ -47,13 +47,13 @@
 }
 
 .c-no-sprite-jpg {
-	background: #000 url(a/c/no-sprite.jpg) left top no-repeat;
+	background: url(a/c/no-sprite.jpg) left top no-repeat;
 }
 .c-no-sprite-png {
-	background: #000 url(a/c/no-sprite.png) left top no-repeat;
+	background: url(a/c/no-sprite.png) left top no-repeat;
 }
 .c-1-jpg {
-	background: #000 url(a/c/sprite-1.jpg) left top no-repeat;
+	background: url(a/c/sprite-1.jpg) left top no-repeat;
 }
 .c-2-jpg {
 	background-image: url(a/c/sprite-2.jpg);

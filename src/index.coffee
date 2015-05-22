@@ -9,9 +9,10 @@ cssParser = require 'css'
 
 URL_REGEXP = /url\s*\(\s*(['"])?([^\)'"]+?)\1?\s*\)/
 ALGORITHM_REGEXP = /\b(top-down|left-right|diagonal|alt-diagonal)\b/
-X2_REGEXP = /-2x\.[^.]+$/
+X2_REGEXP = /2x\.[^.]+$/
 
 coordinates = global._gulpImgCssSpriteCoordinates = global._gulpImgCssSpriteCoordinates || {}
+sprites = global._gulpImgCssSpriteSprites = global._gulpImgCssSpriteSprites || {}
 
 inherit = (proto) ->
 	F = ->
@@ -67,6 +68,7 @@ imgStream = (opt = {}) ->
 						cwd: file.cwd
 						path: sprite
 						contents: new Buffer res.image, 'binary'
+					sprites[sprite] = res.properties
 					for p, c of res.coordinates
 						c.sprite = sprite
 						coordinates[p] = c
@@ -78,11 +80,15 @@ imgStream = (opt = {}) ->
 
 cssDeclarations = (filePath, declarations, opt = {}) ->
 	Q.Promise (resolve, reject) ->
-		dec = null
+		decs = []
+		zoom = 1
+		coordinate = null
+		width = ''
+		height = ''
 		async.eachSeries(
 			declarations
 			(declaration, cb) =>
-				if declaration.property in ['background-image', 'background']
+				if not coordinate and declaration.property in ['background-image', 'background']
 					m = declaration.value.match URL_REGEXP
 					if m?[2]
 						imgPath = path.resolve path.dirname(filePath), m[2]
@@ -97,26 +103,45 @@ cssDeclarations = (filePath, declarations, opt = {}) ->
 									'url("' + path.relative(path.dirname(filePath), coordinate.sprite) + '")'
 							if X2_REGEXP.test coordinate.sprite
 								zoom = 2
-							else
-								zoom = 1
-							x = if coordinate.x is 0 then '0' else (coordinate.x / zoom) + 'px'
-							y = if coordinate.y is 0 then '0' else (coordinate.y / zoom) + 'px'
-							dec =
+							x = if coordinate.x is 0 then '0' else (-coordinate.x / zoom) + 'px'
+							y = if coordinate.y is 0 then '0' else (-coordinate.y / zoom) + 'px'
+							decs.push
 								type: 'declaration'
 								property: 'background-position'
 								value: "#{x} #{y}"
+							if zoom is 2
+								sp = sprites[coordinate.sprite]
+								decs.push
+									type: 'declaration'
+									property: 'background-size'
+									value: "#{sp.width / zoom}px #{sp.height / zoom}px"
 							cb()
 						else
 							cb()
 					else
 						cb()
 				else
+					if declaration.property is 'width'
+						width = declaration.value
+					else if declaration.property is 'height'
+						height = declaration.value
 					cb()
 			(err) =>
 				if err
 					reject err
 				else
-					resolve dec
+					if coordinate
+						if not width
+							decs.push
+								type: 'declaration'
+								property: 'width'
+								value: "#{coordinate.width / zoom}px"
+						if not height
+							decs.push
+								type: 'declaration'
+								property: 'height'
+								value: "#{coordinate.height / zoom}px"
+					resolve decs
 		)
 
 cssRules = (filePath, rules, opt = {}) ->
@@ -133,9 +158,10 @@ cssRules = (filePath, rules, opt = {}) ->
 					).done()
 				if rule.declarations
 					cssDeclarations(filePath, rule.declarations, opt).then(
-						(dec) =>
-							if dec
-								rule.declarations.push dec
+						(decs) =>
+							if decs?.length
+								for dec in decs
+									rule.declarations.push dec
 							cb()
 						(err) =>
 							reject err

@@ -1,97 +1,127 @@
 .a-no-sprite-jpg {
-  background: #000 url(a/no-sprite.jpg) left top no-repeat;
+  background: url(a/no-sprite.jpg) left top no-repeat;
 }
 
 .a-no-sprite-png {
-  background: #000 url(a/no-sprite.png) left top no-repeat;
+  background: url(a/no-sprite.png) left top no-repeat;
 }
 
 .a-1-jpg {
-  background: #000 url("//webyom.org/a/sprite.jpg") left top no-repeat;
-  background-position: 0 0;
+  background: url("a/sprite.jpg") left top no-repeat;
+  background-position: 0 -258px;
+  width: 378px;
+  height: 311px;
 }
 
 .a-2-jpg {
-  background-image: url("//webyom.org/a/sprite.jpg");
-  background-position: 0 313px;
+  background-image: url("a/sprite.jpg");
+  background-position: 0 0;
+  width: 256px;
+  height: 256px;
 }
 
 .a-1-png {
-  background-image: url("//webyom.org/a/sprite.png");
-  background-position: 0 0;
+  background-image: url("a/sprite.png");
+  background-position: 0 -263px;
+  width: 480px;
+  height: 480px;
 }
 
 .a-2-png {
-  background-image: url("//webyom.org/a/sprite.png");
-  background-position: 0 482px;
+  background-image: url("a/sprite.png");
+  background-position: 0 0;
+  width: 241px;
+  height: 261px;
 }
 
 @media (-webkit-min-device-pixel-ratio: 2), 
 (min--moz-device-pixel-ratio: 2), 
 (min-device-pixel-ratio: 2) {
-  .a-1-2x-jpg {
-    background: #000 url("//webyom.org/a/sprite-2x.jpg") left top no-repeat;
-    background-position: 0 0;
+  .a-1-jpg {
+    background: url("a/sprite-2x.jpg") left top no-repeat;
+    background-position: 0 -129px;
+    background-size: 189px 284.5px;
+    width: 189px;
+    height: 155.5px;
   }
 
-  .a-2-2x-jpg {
-    background-image: url("//webyom.org/a/sprite-2x.jpg");
-    background-position: 0 156.5px;
+  .a-2-jpg {
+    background-image: url("a/sprite-2x.jpg");
+    background-position: 0 0;
+    background-size: 189px 284.5px;
+    width: 128px;
+    height: 128px;
   }
 }
 
 .b-no-sprite-jpg {
-  background: #000 url(b/no-sprite.jpg) left top no-repeat;
+  background: url(b/no-sprite.jpg) left top no-repeat;
 }
 
 .b-no-sprite-png {
-  background: #000 url(b/no-sprite.png) left top no-repeat;
+  background: url(b/no-sprite.png) left top no-repeat;
 }
 
 .b-1-jpg {
-  background: #000 url("//webyom.org/b/sprite.jpg") left top no-repeat;
-  background-position: 0 0;
+  background: url("b/sprite.jpg") left top no-repeat;
+  background-position: -258px -258px;
+  width: 378px;
+  height: 311px;
 }
 
 .b-2-jpg {
-  background-image: url("//webyom.org/b/sprite.jpg");
-  background-position: 380px 313px;
+  background-image: url("b/sprite.jpg");
+  background-position: 0 0;
+  width: 256px;
+  height: 256px;
 }
 
 .b-1-png {
-  background-image: url("//webyom.org/b/sprite.png");
-  background-position: 0 0;
+  background-image: url("b/sprite.png");
+  background-position: -243px -263px;
+  width: 480px;
+  height: 480px;
 }
 
 .b-2-png {
-  background-image: url("//webyom.org/b/sprite.png");
-  background-position: 482px 482px;
+  background-image: url("b/sprite.png");
+  background-position: 0 0;
+  width: 241px;
+  height: 261px;
 }
 
 .c-no-sprite-jpg {
-  background: #000 url(a/c/no-sprite.jpg) left top no-repeat;
+  background: url(a/c/no-sprite.jpg) left top no-repeat;
 }
 
 .c-no-sprite-png {
-  background: #000 url(a/c/no-sprite.png) left top no-repeat;
+  background: url(a/c/no-sprite.png) left top no-repeat;
 }
 
 .c-1-jpg {
-  background: #000 url("//webyom.org/a/c/sprite.jpg") left top no-repeat;
+  background: url("a/c/sprite.jpg") left top no-repeat;
   background-position: 0 0;
+  width: 378px;
+  height: 311px;
 }
 
 .c-2-jpg {
-  background-image: url("//webyom.org/a/c/sprite.jpg");
-  background-position: 380px 0;
+  background-image: url("a/c/sprite.jpg");
+  background-position: -380px 0;
+  width: 256px;
+  height: 256px;
 }
 
 .c-1-png {
-  background-image: url("//webyom.org/a/c/sprite.png");
+  background-image: url("a/c/sprite.png");
   background-position: 0 0;
+  width: 480px;
+  height: 480px;
 }
 
 .c-2-png {
-  background-image: url("//webyom.org/a/c/sprite.png");
-  background-position: 482px 0;
+  background-image: url("a/c/sprite.png");
+  background-position: -482px 0;
+  width: 241px;
+  height: 261px;
 }

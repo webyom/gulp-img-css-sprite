@@ -14,11 +14,10 @@ gulp.task 'img', ->
 		.pipe gulp.dest('example/dest')
 
 gulp.task 'example', ['img'], ->
+	gulp.src(['example/src/**/*.html', 'example/src/**/no-sprite*'])
+		.pipe gulp.dest('example/dest')
 	gulp.src('example/src/**/*.css')
-		.pipe imgCssSprite.cssStream
-			base:
-				url: '//webyom.org'
-				dir: 'example/src'
+		.pipe imgCssSprite.cssStream()
 		.pipe gulp.dest('example/dest')
 
 gulp.task 'default', ['compile']
