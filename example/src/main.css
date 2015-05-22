@@ -4,6 +4,12 @@
 .a-2-jpg {
 	background-image: url(a/sprite-top-down-2.jpg);
 }
+.a-1-2x-jpg {
+	background: #000 url(a/sprite-top-down-1-2x.jpg) left top no-repeat;
+}
+.a-2-2x-jpg {
+	background-image: url(a/sprite-top-down-2-2x.jpg);
+}
 .a-1-png {
 	background-image: url(a/sprite-top-down-1.png);
 }

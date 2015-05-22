@@ -7,8 +7,9 @@ through = require 'through2'
 spritesmith = require 'spritesmith'
 cssParser = require 'css'
 
-URL_REGEXP = /url\s*\(['"]?([^\)'"]+)['"]?\)/
+URL_REGEXP = /url\s*\(\s*(['"])?([^\)'"]+?)\1?\s*\)/
 ALGORITHM_REGEXP = /\b(top-down|left-right|diagonal|alt-diagonal)\b/
+X2_REGEXP = /-2x\.[^.]+$/
 
 coordinates = {}
 
@@ -19,9 +20,7 @@ inherit = (proto) ->
 
 img = (opt = {}) ->
 	all = []
-	paths =
-		png: null
-		jpg: null
+	paths = {}
 	dir = ''
 	stream = through.obj (file, enc, next) ->
 		return @emit 'error', new gutil.PluginError('gulp-img-css-sprite', 'File can\'t be null') if file.isNull()
@@ -30,25 +29,21 @@ img = (opt = {}) ->
 		if fileName.indexOf('sprite-') is 0
 			fileDir = path.dirname file.path
 			if fileDir isnt dir
-				all.push paths.png if paths.png?.length
-				all.push paths.jpg if paths.jpg?.length
-				paths.png = []
-				paths.jpg = []
+				for type, ps of paths
+					all.push ps if ps?.length
+				paths = {}
 				dir = fileDir
 			extName = path.extname fileName
-			if extName is '.png'
-				ps = paths.png = paths.png || []
-			else if extName in ['.jpg', '.jpeg']
-				ps = paths.jpg = paths.jpg || []
+			if X2_REGEXP.test file.path
+				ps = paths[extName + '2x'] = paths[extName + '2x'] || []
 			else
-				ps = null
-			if ps
-				ps.push file if not ps.length
-				ps.push file.path
+				ps = paths[extName] = paths[extName] || []
+			ps.push file if not ps.length
+			ps.push file.path
 		next()
 	, (next) ->
-		all.push paths.png if paths.png?.length
-		all.push paths.jpg if paths.jpg?.length
+		for type, ps of paths
+			all.push ps if ps?.length
 		async.eachSeries(
 			all
 			(paths, cb) =>
@@ -57,7 +52,10 @@ img = (opt = {}) ->
 				fileName = path.basename filePath
 				dirName = path.dirname filePath
 				extName = path.extname filePath
-				sprite = dirName + '/sprite' + extName
+				if X2_REGEXP.test fileName
+					sprite = dirName + '/sprite-2x' + extName
+				else
+					sprite = dirName + '/sprite' + extName
 				param = inherit opt
 				param.src = paths
 				m = fileName.match ALGORITHM_REGEXP
@@ -78,21 +76,30 @@ img = (opt = {}) ->
 				next()
 		)
 
-cssDeclarations = (file, declarations, complete) ->
+cssDeclarations = (file, declarations, complete, opt = {}) ->
 	dec = null
 	async.eachSeries(
 		declarations
 		(declaration, cb) =>
 			if declaration.property in ['background-image', 'background']
 				m = declaration.value.match URL_REGEXP
-				if m[1]
-					imgPath = path.resolve path.dirname(file.path), m[1]
+				if m?[2]
+					imgPath = path.resolve path.dirname(file.path), m[2]
 					coordinate = coordinates[imgPath]
 					if coordinate
 						declaration.value = declaration.value.replace URL_REGEXP, (full, url) ->
-							'url(' + path.relative(path.dirname(file.path), coordinate.sprite) + ')'
-						x = if coordinate.x is 0 then '0' else coordinate.x + 'px'
-						y = if coordinate.y is 0 then '0' else coordinate.y + 'px'
+							if opt.base
+								baseUrl = opt.base.url.replace /\/+$/, ''
+								baseDir = path.resolve file.cwd, (opt.base.dir || './')
+								'url("' +  baseUrl + '/' + path.relative(baseDir, coordinate.sprite) + '")'
+							else
+								'url("' + path.relative(path.dirname(file.path), coordinate.sprite) + '")'
+						if X2_REGEXP.test coordinate.sprite
+							zoom = 2
+						else
+							zoom = 1
+						x = if coordinate.x is 0 then '0' else (coordinate.x / zoom) + 'px'
+						y = if coordinate.y is 0 then '0' else (coordinate.y / zoom) + 'px'
 						dec =
 							type: 'declaration'
 							property: 'background-position'
@@ -105,25 +112,26 @@ cssDeclarations = (file, declarations, complete) ->
 			else
 				cb()
 		(err) =>
-			return @emit 'error', new gutil.PluginError('gulp-img-css-sprite', err) if err
+			throw new gutil.PluginError('gulp-img-css-sprite', err) if err
 			complete dec
 	)
 
-cssRules = (file, rules, complete) ->
+cssRules = (file, rules, complete, opt = {}) ->
 	async.eachSeries(
 		rules
 		(rule, cb) =>
 			if rule.rules
-				cssRules file, rule.rules, cb
+				cssRules file, rule.rules, cb, opt
 			if rule.declarations
 				cssDeclarations file, rule.declarations, (dec) ->
 					if dec
 						rule.declarations.push dec
 					cb()
+				, opt
 			else
 				cb()
 		(err) =>
-			return @emit 'error', new gutil.PluginError('gulp-img-css-sprite', err) if err
+			throw new gutil.PluginError('gulp-img-css-sprite', err) if err
 			complete()
 	)
 
@@ -135,6 +143,7 @@ cssFile = (file, opt = {}) ->
 			cssRules file, ast.stylesheet.rules || [], ->
 				file.contents = new Buffer cssParser.stringify(ast, opt)
 				resolve file
+			, opt
 		else
 			resolve file
 
