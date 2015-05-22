@@ -8,16 +8,6 @@
   background-position: 0 313px;
 }
 
-.a-1-2x-jpg {
-  background: #000 url("//webyom.org/a/sprite-2x.jpg") left top no-repeat;
-  background-position: 0 0;
-}
-
-.a-2-2x-jpg {
-  background-image: url("//webyom.org/a/sprite-2x.jpg");
-  background-position: 0 156.5px;
-}
-
 .a-1-png {
   background-image: url("//webyom.org/a/sprite.png");
   background-position: 0 0;
@@ -26,4 +16,18 @@
 .a-2-png {
   background-image: url("//webyom.org/a/sprite.png");
   background-position: 0 482px;
+}
+
+@media (-webkit-min-device-pixel-ratio: 2), 
+(min--moz-device-pixel-ratio: 2), 
+(min-device-pixel-ratio: 2) {
+  .a-1-2x-jpg {
+    background: #000 url("//webyom.org/a/sprite-2x.jpg") left top no-repeat;
+    background-position: 0 0;
+  }
+
+  .a-2-2x-jpg {
+    background-image: url("//webyom.org/a/sprite-2x.jpg");
+    background-position: 0 156.5px;
+  }
 }

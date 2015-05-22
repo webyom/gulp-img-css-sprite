@@ -9,13 +9,13 @@ gulp.task 'compile', ->
 
 gulp.task 'img', ->
 	gulp.src('example/src/**/*.+(jpg|png)')
-		.pipe imgCssSprite.img
+		.pipe imgCssSprite.imgStream
 			padding: 2
 		.pipe gulp.dest('example/dest')
 
 gulp.task 'example', ['img'], ->
 	gulp.src('example/src/**/*.css')
-		.pipe imgCssSprite.css
+		.pipe imgCssSprite.cssStream
 			base:
 				url: '//webyom.org'
 				dir: 'example/src'
