@@ -1,3 +1,11 @@
+.a-no-sprite-jpg {
+  background: #000 url(a/no-sprite.jpg) left top no-repeat;
+}
+
+.a-no-sprite-png {
+  background: #000 url(a/no-sprite.png) left top no-repeat;
+}
+
 .a-1-jpg {
   background: #000 url("//webyom.org/a/sprite.jpg") left top no-repeat;
   background-position: 0 0;
@@ -30,4 +38,60 @@
     background-image: url("//webyom.org/a/sprite-2x.jpg");
     background-position: 0 156.5px;
   }
+}
+
+.b-no-sprite-jpg {
+  background: #000 url(b/no-sprite.jpg) left top no-repeat;
+}
+
+.b-no-sprite-png {
+  background: #000 url(b/no-sprite.png) left top no-repeat;
+}
+
+.b-1-jpg {
+  background: #000 url("//webyom.org/b/sprite.jpg") left top no-repeat;
+  background-position: 0 0;
+}
+
+.b-2-jpg {
+  background-image: url("//webyom.org/b/sprite.jpg");
+  background-position: 380px 313px;
+}
+
+.b-1-png {
+  background-image: url("//webyom.org/b/sprite.png");
+  background-position: 0 0;
+}
+
+.b-2-png {
+  background-image: url("//webyom.org/b/sprite.png");
+  background-position: 482px 482px;
+}
+
+.c-no-sprite-jpg {
+  background: #000 url(a/c/no-sprite.jpg) left top no-repeat;
+}
+
+.c-no-sprite-png {
+  background: #000 url(a/c/no-sprite.png) left top no-repeat;
+}
+
+.c-1-jpg {
+  background: #000 url("//webyom.org/a/c/sprite.jpg") left top no-repeat;
+  background-position: 0 0;
+}
+
+.c-2-jpg {
+  background-image: url("//webyom.org/a/c/sprite.jpg");
+  background-position: 380px 0;
+}
+
+.c-1-png {
+  background-image: url("//webyom.org/a/c/sprite.png");
+  background-position: 0 0;
+}
+
+.c-2-png {
+  background-image: url("//webyom.org/a/c/sprite.png");
+  background-position: 482px 0;
 }

@@ -156,7 +156,7 @@ cssContent = (content, filePath, opt = {}) ->
 			ast = cssParser.parse content, opt
 			cssRules(filePath, ast.stylesheet.rules || [], opt).then(
 				=>
-					content = new Buffer cssParser.stringify(ast, opt)
+					content = cssParser.stringify(ast, opt)
 					resolve content
 				(err) =>
 					reject err
