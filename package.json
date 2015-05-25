@@ -1,6 +1,6 @@
 {
   "name": "gulp-img-css-sprite",
-  "version": "0.1.4",
+  "version": "0.1.5",
   "description": "Generate css sprite",
   "keywords": [
     "html",

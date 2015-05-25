@@ -54,6 +54,26 @@
   }
 }
 
+@media (-webkit-min-device-pixel-ratio: 1.5), 
+(min--moz-device-pixel-ratio: 1.5), 
+(min-device-pixel-ratio: 1.5) {
+  .a-1-png {
+    background: url("a/sprite-1.5x.png") left top no-repeat;
+    background-position: 0 -175.33333333333334px;
+    background-size: 320px 495.3333333333333px;
+    width: 320px;
+    height: 320px;
+  }
+
+  .a-2-png {
+    background-image: url("a/sprite-1.5x.png");
+    background-position: 0 0;
+    background-size: 320px 495.3333333333333px;
+    width: 160.66666666666666px;
+    height: 174px;
+  }
+}
+
 .b-no-sprite-jpg {
   background: url(b/no-sprite.jpg) left top no-repeat;
 }

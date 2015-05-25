@@ -9,7 +9,7 @@ cssParser = require 'css'
 
 URL_REGEXP = /url\s*\(\s*(['"])?([^\)'"]+?)\1?\s*\)/
 ALGORITHM_REGEXP = /\b(top-down|left-right|diagonal|alt-diagonal)\b/
-X2_REGEXP = /2x\.[^.]+$/
+RATIO_REGEXP = /\D(\d(?:\.\d)?)x\.[^.]+$/
 
 coordinates = global._gulpImgCssSpriteCoordinates = global._gulpImgCssSpriteCoordinates || {}
 sprites = global._gulpImgCssSpriteSprites = global._gulpImgCssSpriteSprites || {}
@@ -35,8 +35,9 @@ imgStream = (opt = {}) ->
 				paths = {}
 				dir = fileDir
 			extName = path.extname fileName
-			if X2_REGEXP.test file.path
-				ps = paths[extName + '2x'] = paths[extName + '2x'] || []
+			m = file.path.match RATIO_REGEXP
+			if m and m[1] > 1
+				ps = paths[extName + m[1] + 'x'] = paths[extName + m[1] + 'x'] || []
 			else
 				ps = paths[extName] = paths[extName] || []
 			ps.push file if not ps.length
@@ -53,8 +54,9 @@ imgStream = (opt = {}) ->
 				fileName = path.basename filePath
 				dirName = path.dirname filePath
 				extName = path.extname filePath
-				if X2_REGEXP.test fileName
-					sprite = dirName + '/sprite-2x' + extName
+				m = fileName.match RATIO_REGEXP
+				if m and m[1] > 1
+					sprite = dirName + '/sprite-' + m[1] + 'x' + extName
 				else
 					sprite = dirName + '/sprite' + extName
 				param = inherit opt
@@ -81,7 +83,7 @@ imgStream = (opt = {}) ->
 cssDeclarations = (filePath, declarations, opt = {}) ->
 	Q.Promise (resolve, reject) ->
 		decs = []
-		zoom = 1
+		ratio = 1
 		coordinate = null
 		width = ''
 		height = ''
@@ -101,20 +103,23 @@ cssDeclarations = (filePath, declarations, opt = {}) ->
 									'url("' +  baseUrl + '/' + path.relative(baseDir, coordinate.sprite) + '")'
 								else
 									'url("' + path.relative(path.dirname(filePath), coordinate.sprite) + '")'
-							if X2_REGEXP.test coordinate.sprite
-								zoom = 2
-							x = if coordinate.x is 0 then '0' else (-coordinate.x / zoom) + 'px'
-							y = if coordinate.y is 0 then '0' else (-coordinate.y / zoom) + 'px'
+							m = coordinate.sprite.match RATIO_REGEXP
+							if m
+								ratio = parseFloat m[1]
+								if not (ratio > 1)
+									ratio = 1
+							x = if coordinate.x is 0 then '0' else (-coordinate.x / ratio) + 'px'
+							y = if coordinate.y is 0 then '0' else (-coordinate.y / ratio) + 'px'
 							decs.push
 								type: 'declaration'
 								property: 'background-position'
 								value: "#{x} #{y}"
-							if zoom is 2
+							if ratio > 1
 								sp = sprites[coordinate.sprite]
 								decs.push
 									type: 'declaration'
 									property: 'background-size'
-									value: "#{sp.width / zoom}px #{sp.height / zoom}px"
+									value: "#{sp.width / ratio}px #{sp.height / ratio}px"
 							cb()
 						else
 							cb()
@@ -135,12 +140,12 @@ cssDeclarations = (filePath, declarations, opt = {}) ->
 							decs.push
 								type: 'declaration'
 								property: 'width'
-								value: "#{coordinate.width / zoom}px"
+								value: "#{coordinate.width / ratio}px"
 						if not height
 							decs.push
 								type: 'declaration'
 								property: 'height'
-								value: "#{coordinate.height / zoom}px"
+								value: "#{coordinate.height / ratio}px"
 					resolve decs
 		)
 

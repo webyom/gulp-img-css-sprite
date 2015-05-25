@@ -26,6 +26,16 @@
 		background-image: url(a/sprite-top-down-2-2x.jpg);
 	}
 }
+@media (-webkit-min-device-pixel-ratio: 1.5), 
+(min--moz-device-pixel-ratio: 1.5), 
+(min-device-pixel-ratio: 1.5) {
+	.a-1-png {
+		background: url(a/sprite-top-down-1-1.5x.png) left top no-repeat;
+	}
+	.a-2-png {
+		background-image: url(a/sprite-top-down-2-1.5x.png);
+	}
+}
 
 .b-no-sprite-jpg {
 	background: url(b/no-sprite.jpg) left top no-repeat;
