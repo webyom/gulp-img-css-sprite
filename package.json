@@ -1,10 +1,10 @@
 {
   "name": "gulp-img-css-sprite",
-  "version": "0.1.5",
+  "version": "0.2.0",
   "description": "Generate css sprite",
   "keywords": [
-    "html",
-    "minifier",
+    "img",
+    "sprite",
     "gulpplugin"
   ],
   "homepage": "https://github.com/webyom/gulp-img-css-sprite",
@@ -30,15 +30,15 @@
   "engines": {
     "node": ">= 0.8.0"
   },
-  "scripts": {
-  },
+  "scripts": {},
   "dependencies": {
-    "q": "^1.0.1",
-    "css": "^2.2.0",
     "async": "^0.9.0",
-    "gulp-util": "^2.2.19",
+    "css": "^2.2.0",
+    "plugin-error": "^1.0.0",
+    "q": "^1.0.1",
+    "spritesmith": "^1.3.1",
     "through2": "^0.5.1",
-    "spritesmith": "^1.3.1"
+    "vinyl": "^2.1.0"
   },
   "devDependencies": {
     "gulp": "^3.8.5",

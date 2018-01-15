@@ -2,7 +2,8 @@ Q = require 'q'
 fs = require 'fs'
 path = require 'path'
 async = require 'async'
-gutil = require 'gulp-util'
+Vinyl = require 'vinyl'
+PluginError = require 'plugin-error'
 through = require 'through2'
 spritesmith = require 'spritesmith'
 cssParser = require 'css'
@@ -24,8 +25,8 @@ imgStream = (opt = {}) ->
 	paths = {}
 	dir = ''
 	through.obj (file, enc, next) ->
-		return @emit 'error', new gutil.PluginError('gulp-img-css-sprite', 'File can\'t be null') if file.isNull()
-		return @emit 'error', new gutil.PluginError('gulp-img-css-sprite', 'Streams not supported') if file.isStream()
+		return @emit 'error', new PluginError('gulp-img-css-sprite', 'File can\'t be null') if file.isNull()
+		return @emit 'error', new PluginError('gulp-img-css-sprite', 'Streams not supported') if file.isStream()
 		fileName = path.basename file.path
 		if fileName.indexOf('sprite-') is 0
 			fileDir = path.dirname file.path
@@ -64,8 +65,8 @@ imgStream = (opt = {}) ->
 				m = fileName.match ALGORITHM_REGEXP
 				param.algorithm = m?[1] || param.algorithm
 				spritesmith param, (err, res) =>
-					return @emit 'error', new gutil.PluginError('gulp-img-css-sprite', err) if err
-					@push new gutil.File
+					return @emit 'error', new PluginError('gulp-img-css-sprite', err) if err
+					@push new Vinyl
 						base: file.base
 						cwd: file.cwd
 						path: sprite
@@ -76,7 +77,7 @@ imgStream = (opt = {}) ->
 						coordinates[p] = c
 					cb()
 			(err) =>
-				return @emit 'error', new gutil.PluginError('gulp-img-css-sprite', err) if err
+				return @emit 'error', new PluginError('gulp-img-css-sprite', err) if err
 				next()
 		)
 
@@ -181,7 +182,7 @@ cssRules = (filePath, rules, opt = {}) ->
 		)
 
 cssContent = (content, filePath, opt = {}) ->
-	throw new gutil.PluginError('gulp-img-css-sprite', 'filePath is needed') if not filePath
+	throw new PluginError('gulp-img-css-sprite', 'filePath is needed') if not filePath
 	Q.Promise (resolve, reject) ->
 		if URL_REGEXP.test content
 			ast = cssParser.parse content, opt
@@ -197,15 +198,15 @@ cssContent = (content, filePath, opt = {}) ->
 
 cssStream = (opt = {}) ->
 	through.obj (file, enc, next) ->
-		return @emit 'error', new gutil.PluginError('gulp-img-css-sprite', 'File can\'t be null') if file.isNull()
-		return @emit 'error', new gutil.PluginError('gulp-img-css-sprite', 'Streams not supported') if file.isStream()
+		return @emit 'error', new PluginError('gulp-img-css-sprite', 'File can\'t be null') if file.isNull()
+		return @emit 'error', new PluginError('gulp-img-css-sprite', 'Streams not supported') if file.isStream()
 		cssContent(file.contents.toString(), file.path, opt).then(
 			(content) =>
 				file.contents = new Buffer content
 				@push file
 				next()
 			(err) =>
-				@emit 'error', new gutil.PluginError('gulp-img-css-sprite', err) if err
+				@emit 'error', new PluginError('gulp-img-css-sprite', err) if err
 		).done()
 
 module.exports =
