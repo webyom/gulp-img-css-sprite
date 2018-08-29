@@ -5,11 +5,11 @@ async = require 'async'
 Vinyl = require 'vinyl'
 PluginError = require 'plugin-error'
 through = require 'through2'
-spritesmith = require 'spritesmith'
+Spritesmith = require 'spritesmith'
 cssParser = require 'css'
 
 URL_REGEXP = /url\s*\(\s*(['"])?([^\)'"]+?)\1?\s*\)/
-ALGORITHM_REGEXP = /\b(top-down|left-right|diagonal|alt-diagonal)\b/
+ALGORITHM_REGEXP = /\b(top-down|left-right|diagonal|alt-diagonal|binary-tree)\b/
 RATIO_REGEXP = /\D(\d(?:\.\d)?)x\.[^.]+$/
 
 coordinates = global._gulpImgCssSpriteCoordinates = global._gulpImgCssSpriteCoordinates || {}
@@ -64,7 +64,7 @@ imgStream = (opt = {}) ->
 				param.src = paths
 				m = fileName.match ALGORITHM_REGEXP
 				param.algorithm = m?[1] || param.algorithm
-				spritesmith param, (err, res) =>
+				Spritesmith.run param, (err, res) =>
 					return @emit 'error', new PluginError('gulp-img-css-sprite', err) if err
 					@push new Vinyl
 						base: file.base
