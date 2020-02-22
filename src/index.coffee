@@ -101,8 +101,12 @@ cssDeclarations = (filePath, declarations, opt = {}) ->
 			(declaration, cb) ->
 				if not coordinate and declaration.property in ['background-image', 'background']
 					m = declaration.value.match URL_REGEXP
-					if m?[2]
-						imgPath = path.resolve path.dirname(filePath), m[2]
+					imgPath = m?[2]
+					if imgPath
+						if imgPath.indexOf('/') is 0
+							imgPath = path.join path.resolve(opt.basePath), imgPath if opt.basePath
+						else
+							imgPath = path.resolve path.dirname(filePath), imgPath
 						coordinate = coordinates[imgPath]
 						if coordinate
 							declaration.value = declaration.value.replace URL_REGEXP, (full, url) ->
