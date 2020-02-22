@@ -7,7 +7,7 @@
 }
 
 .a-1-jpg {
-  background: url("a/sprite.jpg") left top no-repeat;
+  background: url(a/sprite.jpg) left top no-repeat;
   width: 30vw;
   background-position: 0 -20.476190476190478vw;
   background-size: 30vw 45.15873015873016vw;
@@ -15,21 +15,21 @@
 }
 
 .a-2-jpg {
-  background-image: url("a/sprite.jpg");
+  background-image: url(/a/sprite.jpg);
   background-position: 0 0;
   width: 256px;
   height: 256px;
 }
 
 .a-1-png {
-  background-image: url("a/sprite.png");
+  background-image: url(a/sprite.png);
   background-position: 0 -263px;
   width: 480px;
   height: 480px;
 }
 
 .a-2-png {
-  background-image: url("a/sprite.png");
+  background-image: url(a/sprite.png);
   background-position: 0 0;
   width: 241px;
   height: 261px;
@@ -39,7 +39,7 @@
 (min--moz-device-pixel-ratio: 2), 
 (min-device-pixel-ratio: 2) {
   .a-1-jpg {
-    background: url("a/sprite-2x.jpg") left top no-repeat;
+    background: url(a/sprite-2x.jpg) left top no-repeat;
     width: 30vw;
     background-position: 0 -20.476190476190478vw;
     background-size: 30vw 45.15873015873016vw;
@@ -47,7 +47,7 @@
   }
 
   .a-2-jpg {
-    background-image: url("a/sprite-2x.jpg");
+    background-image: url(/a/sprite-2x.jpg);
     background-position: 0 0;
     background-size: 189px 284.5px;
     width: 128px;
@@ -59,7 +59,7 @@
 (min--moz-device-pixel-ratio: 1.5), 
 (min-device-pixel-ratio: 1.5) {
   .a-1-png {
-    background: url("a/sprite-1.5x.png") left top no-repeat;
+    background: url(a/sprite-1.5x.png) left top no-repeat;
     background-position: 0 -175.33333333333334px;
     background-size: 320px 495.3333333333333px;
     width: 320px;
@@ -67,7 +67,7 @@
   }
 
   .a-2-png {
-    background-image: url("a/sprite-1.5x.png");
+    background-image: url(a/sprite-1.5x.png);
     background-position: 0 0;
     background-size: 320px 495.3333333333333px;
     width: 160.66666666666666px;
@@ -84,28 +84,28 @@
 }
 
 .b-1-jpg {
-  background: url("b/sprite.jpg") left top no-repeat;
+  background: url(b/sprite.jpg) left top no-repeat;
   background-position: -258px -258px;
   width: 378px;
   height: 311px;
 }
 
 .b-2-jpg {
-  background-image: url("b/sprite.jpg");
+  background-image: url(b/sprite.jpg);
   background-position: 0 0;
   width: 256px;
   height: 256px;
 }
 
 .b-1-png {
-  background-image: url("b/sprite.png");
+  background-image: url(b/sprite.png);
   background-position: -243px -263px;
   width: 480px;
   height: 480px;
 }
 
 .b-2-png {
-  background-image: url("b/sprite.png");
+  background-image: url(b/sprite.png);
   background-position: 0 0;
   width: 241px;
   height: 261px;
@@ -120,28 +120,28 @@
 }
 
 .c-1-jpg {
-  background: url("a/c/sprite.jpg") left top no-repeat;
+  background: url(a/c/sprite.jpg) left top no-repeat;
   background-position: 0 0;
   width: 378px;
   height: 311px;
 }
 
 .c-2-jpg {
-  background-image: url("a/c/sprite.jpg");
+  background-image: url(a/c/sprite.jpg);
   background-position: -380px 0;
   width: 256px;
   height: 256px;
 }
 
 .c-1-png {
-  background-image: url("a/c/sprite.png");
+  background-image: url(a/c/sprite.png);
   background-position: 0 0;
   width: 480px;
   height: 480px;
 }
 
 .c-2-png {
-  background-image: url("a/c/sprite.png");
+  background-image: url(a/c/sprite.png);
   background-position: -482px 0;
   width: 241px;
   height: 261px;

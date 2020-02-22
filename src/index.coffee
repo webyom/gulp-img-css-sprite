@@ -101,21 +101,21 @@ cssDeclarations = (filePath, declarations, opt = {}) ->
 			(declaration, cb) ->
 				if not coordinate and declaration.property in ['background-image', 'background']
 					m = declaration.value.match URL_REGEXP
-					imgPath = m?[2]
-					if imgPath
+					if m?[2]
+						basePath = path.resolve opt.basePath if opt.basePath
+						imgPath = m[2]
 						if imgPath.indexOf('/') is 0
-							imgPath = path.join path.resolve(opt.basePath), imgPath if opt.basePath
+							imgPath = path.join basePath, imgPath if basePath
 						else
 							imgPath = path.resolve path.dirname(filePath), imgPath
 						coordinate = coordinates[imgPath]
 						if coordinate
-							declaration.value = declaration.value.replace URL_REGEXP, (full, url) ->
-								if opt.base
-									baseUrl = opt.base.url.replace /\/+$/, ''
-									baseDir = path.resolve process.cwd(), (opt.base.dir || './')
-									'url("' +  baseUrl + '/' + path.relative(baseDir, coordinate.sprite) + '")'
+							declaration.value = declaration.value.replace URL_REGEXP, (full, quote, url) ->
+								quote = quote || ''
+								if m[2].indexOf('/') is 0
+									"url(#{quote}/" + path.relative(basePath, coordinate.sprite) + "#{quote})"
 								else
-									'url("' + path.relative(path.dirname(filePath), coordinate.sprite) + '")'
+									"url(#{quote}" + path.relative(path.dirname(filePath), coordinate.sprite) + "#{quote})"
 							if vwWidthValue
 								ratio = coordinate.width / vwWidthValue
 								unit = 'vw'
