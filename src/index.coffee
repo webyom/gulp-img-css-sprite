@@ -85,12 +85,20 @@ cssDeclarations = (filePath, declarations, opt = {}) ->
 	Q.Promise (resolve, reject) ->
 		decs = []
 		ratio = 1
+		unit = 'px'
 		coordinate = null
 		width = ''
 		height = ''
+		vwWidthValue = 0
+		declarations.forEach (declaration) ->
+			if declaration.property is 'width'
+				width = declaration.value
+				vwWidthValue = parseFloat width if /vw$/.test width
+			else if declaration.property is 'height'
+				height = declaration.value
 		async.eachSeries(
 			declarations
-			(declaration, cb) =>
+			(declaration, cb) ->
 				if not coordinate and declaration.property in ['background-image', 'background']
 					m = declaration.value.match URL_REGEXP
 					if m?[2]
@@ -104,35 +112,35 @@ cssDeclarations = (filePath, declarations, opt = {}) ->
 									'url("' +  baseUrl + '/' + path.relative(baseDir, coordinate.sprite) + '")'
 								else
 									'url("' + path.relative(path.dirname(filePath), coordinate.sprite) + '")'
-							m = coordinate.sprite.match RATIO_REGEXP
-							if m
-								ratio = parseFloat m[1]
-								if not (ratio > 1)
-									ratio = 1
-							x = if coordinate.x is 0 then '0' else (-coordinate.x / ratio) + 'px'
-							y = if coordinate.y is 0 then '0' else (-coordinate.y / ratio) + 'px'
+							if vwWidthValue
+								ratio = coordinate.width / vwWidthValue
+								unit = 'vw'
+							else
+								m = coordinate.sprite.match RATIO_REGEXP
+								if m
+									ratio = parseFloat m[1]
+									if not (ratio > 1)
+										ratio = 1
+							x = if coordinate.x is 0 then '0' else (-coordinate.x / ratio) + unit
+							y = if coordinate.y is 0 then '0' else (-coordinate.y / ratio) + unit
 							decs.push
 								type: 'declaration'
 								property: 'background-position'
 								value: "#{x} #{y}"
-							if ratio > 1
+							if ratio isnt 1
 								sp = sprites[coordinate.sprite]
 								decs.push
 									type: 'declaration'
 									property: 'background-size'
-									value: "#{sp.width / ratio}px #{sp.height / ratio}px"
+									value: "#{sp.width / ratio}#{unit} #{sp.height / ratio}#{unit}"
 							cb()
 						else
 							cb()
 					else
 						cb()
 				else
-					if declaration.property is 'width'
-						width = declaration.value
-					else if declaration.property is 'height'
-						height = declaration.value
 					cb()
-			(err) =>
+			(err) ->
 				if err
 					reject err
 				else
@@ -141,12 +149,12 @@ cssDeclarations = (filePath, declarations, opt = {}) ->
 							decs.push
 								type: 'declaration'
 								property: 'width'
-								value: "#{coordinate.width / ratio}px"
+								value: "#{coordinate.width / ratio}#{unit}"
 						if not height
 							decs.push
 								type: 'declaration'
 								property: 'height'
-								value: "#{coordinate.height / ratio}px"
+								value: "#{coordinate.height / ratio}#{unit}"
 					resolve decs
 		)
 
@@ -154,27 +162,27 @@ cssRules = (filePath, rules, opt = {}) ->
 	Q.Promise (resolve, reject) ->
 		async.eachSeries(
 			rules
-			(rule, cb) =>
+			(rule, cb) ->
 				if rule.rules
 					cssRules(filePath, rule.rules, opt).then(
-						=>
+						->
 							cb()
-						(err) =>
+						(err) ->
 							reject err
 					).done()
 				if rule.declarations
 					cssDeclarations(filePath, rule.declarations, opt).then(
-						(decs) =>
+						(decs) ->
 							if decs?.length
 								for dec in decs
 									rule.declarations.push dec
 							cb()
-						(err) =>
+						(err) ->
 							reject err
 					).done()
 				else if not rule.rules
 					cb()
-			(err) =>
+			(err) ->
 				if err
 					reject err
 				else
@@ -187,10 +195,10 @@ cssContent = (content, filePath, opt = {}) ->
 		if URL_REGEXP.test content
 			ast = cssParser.parse content, opt
 			cssRules(filePath, ast.stylesheet.rules || [], opt).then(
-				=>
+				->
 					content = cssParser.stringify(ast, opt)
 					resolve content
-				(err) =>
+				(err) ->
 					reject err
 			).done()
 		else

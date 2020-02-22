@@ -8,9 +8,10 @@
 
 .a-1-jpg {
   background: url("a/sprite.jpg") left top no-repeat;
-  background-position: 0 -258px;
-  width: 378px;
-  height: 311px;
+  width: 30vw;
+  background-position: 0 -20.476190476190478vw;
+  background-size: 30vw 45.15873015873016vw;
+  height: 24.682539682539684vw;
 }
 
 .a-2-jpg {
@@ -39,10 +40,10 @@
 (min-device-pixel-ratio: 2) {
   .a-1-jpg {
     background: url("a/sprite-2x.jpg") left top no-repeat;
-    background-position: 0 -129px;
-    background-size: 189px 284.5px;
-    width: 189px;
-    height: 155.5px;
+    width: 30vw;
+    background-position: 0 -20.476190476190478vw;
+    background-size: 30vw 45.15873015873016vw;
+    height: 24.682539682539684vw;
   }
 
   .a-2-jpg {

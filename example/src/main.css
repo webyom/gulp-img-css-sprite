@@ -6,6 +6,7 @@
 }
 .a-1-jpg {
 	background: url(a/sprite-top-down-1.jpg) left top no-repeat;
+	width: 30vw;
 }
 .a-2-jpg {
 	background-image: url(a/sprite-top-down-2.jpg);
@@ -21,6 +22,7 @@
 (min-device-pixel-ratio: 2) {
 	.a-1-jpg {
 		background: url(a/sprite-top-down-1-2x.jpg) left top no-repeat;
+		width: 30vw;
 	}
 	.a-2-jpg {
 		background-image: url(a/sprite-top-down-2-2x.jpg);

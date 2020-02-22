@@ -1,6 +1,6 @@
 {
   "name": "gulp-img-css-sprite",
-  "version": "0.2.1",
+  "version": "0.3.0",
   "description": "Generate css sprite",
   "keywords": [
     "img",
@@ -33,10 +33,10 @@
   "scripts": {},
   "dependencies": {
     "async": "^0.9.0",
-    "css": "^2.2.0",
+    "css": "^2.2.4",
     "plugin-error": "^1.0.0",
     "q": "^1.0.1",
-    "spritesmith": "^3.3.1",
+    "spritesmith": "^3.4.0",
     "through2": "^0.5.1",
     "vinyl": "^2.1.0"
   },
