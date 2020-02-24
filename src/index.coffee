@@ -102,10 +102,10 @@ cssDeclarations = (filePath, declarations, opt = {}) ->
 				if not coordinate and declaration.property in ['background-image', 'background']
 					m = declaration.value.match URL_REGEXP
 					if m?[2]
-						basePath = path.resolve opt.basePath if opt.basePath
+						baseDir = path.resolve opt.baseDir if opt.baseDir
 						imgPath = m[2]
 						if imgPath.indexOf('/') is 0
-							imgPath = path.join basePath, imgPath if basePath
+							imgPath = path.join baseDir, imgPath if baseDir
 						else
 							imgPath = path.resolve path.dirname(filePath), imgPath
 						coordinate = coordinates[imgPath]
@@ -113,7 +113,7 @@ cssDeclarations = (filePath, declarations, opt = {}) ->
 							declaration.value = declaration.value.replace URL_REGEXP, (full, quote, url) ->
 								quote = quote || ''
 								if m[2].indexOf('/') is 0
-									"url(#{quote}/" + path.relative(basePath, coordinate.sprite) + "#{quote})"
+									"url(#{quote}/" + path.relative(baseDir, coordinate.sprite) + "#{quote})"
 								else
 									"url(#{quote}" + path.relative(path.dirname(filePath), coordinate.sprite) + "#{quote})"
 							if vwWidthValue

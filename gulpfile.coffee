@@ -18,7 +18,7 @@ gulp.task 'example', ['img'], ->
 		.pipe gulp.dest('example/dest')
 	gulp.src('example/src/**/*.css')
 		.pipe imgCssSprite.cssStream
-			basePath: 'example/src'
+			baseDir: 'example/src'
 		.pipe gulp.dest('example/dest')
 
 gulp.task 'default', ['compile']
